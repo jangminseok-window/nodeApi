@@ -1,0 +1,37 @@
+DROP TABLE IF EXISTS `board`;
+CREATE TABLE `board` (
+  `bnum` int NOT NULL,
+  `id` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8_bin NOT NULL,
+  `title` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8_bin NOT NULL,
+  `content` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8_bin NOT NULL,
+  `writedate` date NOT NULL,
+  PRIMARY KEY (`bnum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
+
+DROP TABLE IF EXISTS `file`;
+CREATE TABLE `file` (
+  `fnum` int NOT NULL AUTO_INCREMENT,
+  `bnum` int NOT NULL,
+  `savefile` varchar(45) CHARACTER SET utf8mb3 NOT NULL,
+  `filetype` varchar(45) CHARACTER SET utf8mb3 NOT NULL,
+  `writedate` date DEFAULT NULL,
+  PRIMARY KEY (`fnum`),
+  KEY `board_bnum_fk_idx` (`bnum`),
+  CONSTRAINT `board_bnum_fk` FOREIGN KEY (`bnum`) REFERENCES `board` (`bnum`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
+
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `unum` INT NOT NULL AUTO_INCREMENT,
+  `id` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pwd` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `writedate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`unum`),
+  UNIQUE KEY `unique_id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+ALTER TABLE users ADD COLUMN `birthday`  CHAR(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL AFTER email;
+ALTER TABLE users MODIFY COLUMN `birthday` VARCHAR(256)  NULL;
+ALTER TABLE users MODIFY COLUMN birthday VARBINARY(255);

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userMapper">
+  <select id="selectById">
+    SELECT  unum
+           ,id
+           ,name
+           , pwd
+           ,email 
+           , CAST(AES_DECRYPT(birthday, #{secretkey}) AS CHAR)    AS birthday 
+    FROM users 
+    WHERE 
+          id = #{id}
+  </select>
+
+<insert id="insertUser">
+    INSERT INTO users 
+               (id, pwd, name, email, birthday) 
+    VALUES     (#{id},
+                #{pwd},
+                #{name},
+                #{email},
+                AES_ENCRYPT(#{birthday}, #{secretkey})
+               )
+</insert>
+
+
+<update id="updateUser">
+    UPDATE users
+    <set>
+        <if test="pwd != null">pwd = #{pwd},</if>
+        <if test="name != null">name = #{name},</if>
+        <if test="email != null">email = #{email},</if>
+        <if test="birthday != null">birthday = AES_ENCRYPT(#{birthday}, #{secretkey}),</if>
+    </set>
+    WHERE id = #{id}
+</update>
+
+
+<delete id="deleteUser">
+   DELETE 
+   FROM 
+      users 
+   WHERE id = #{id}
+</delete>
+
+
+</mapper>

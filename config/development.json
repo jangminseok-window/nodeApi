@@ -1,0 +1,23 @@
+{
+    "db": {
+      "host": "43.201.220.132",
+      "user": "midstar",
+      "password": "dlalwjd5",
+      "database" : "midstardb",
+      "secretkey" : "xxxxwkdalstjr"
+
+    },
+    "server": {
+      "port": 8081,
+      "sessionTimeout" :  600  
+    },
+
+    "logLevel" : "debug",
+    "redis": {
+      "host": "43.201.220.132",
+      "user": "",
+      "password": "dlalwjd5",
+      "database" : ""
+    }
+  }
+  

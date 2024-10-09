@@ -1,0 +1,449 @@
+cd "C:\Users\TOURSOFT\Google 드라이브\git-hup\nodeWeb"
+
+aws 로그인 
+midstar@naver.com !Dl~~~
+이름:jang minseok
+C:\Users\TOURSOFT\Google 드라이브\중요자료
+key : ubutu-micro.ppk  --> putty연결]
+-- root계정으로 문서 편집 --
+ sudo nano /etc/mongod.conf
+
+--  git hub ---
+midstar.jang@gmail/!dl~~가입
+
+
+--------------------
+mysql 시작
+------------
+
+1.접속 :sudo mysql
+2.사용자 생성
+CREATE USER 'midstar'@'localhost' IDENTIFIED BY 'dlalwjd5';
+3.권한설정
+CREATE USER 'midstar'@'%' IDENTIFIED BY 'dlalwjd5';
+
+GRANT ALL PRIVILEGES ON *.* TO 'midstar'@'%'; --로컬 / 원격 모두 접근가능
+
+
+4. 설정 적용
+ FLUSH PRIVILEGES;
+
+5. 시작/종료
+sudo systemctl start mysql
+sudo systemctl stop mysql
+--부팅시 자동 시작
+sudo systemctl enable mysql
+-- 부팅시 자동시작 안함 
+sudo systemctl disable mysql
+
+
+
+sudo systemctl start mysql
+sudo systemctl enable mysql
+6.CREATE DATABASE midstardb; database생성
+ db사용 : use midstardb;
+
+접속: mysql -u midstar -p
+
+
+공식 dns
+ec2-43-203-244-204.ap-northeast-2.compute.amazonaws.com
+
+공인 IP : 43.201.220.132
+--------------------------------------
+sudo apt install apache2 -y   # Ubuntu
+sudo systemctl start apache2   # Ubuntu
+----------------------------------------
+---------------------------
+apache nodejs 연동
+---------------------------
+Apache와 Node.js를 연동하여 특정 경로(예: /api)의 요청을 Node.js 애플리케이션으로 전달하는 방법을 설명해드리겠습니다:
+Apache 모듈 활성화:
+먼저, 필요한 Apache 모듈을 활성화합니다.
+text
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+
+Apache 설정 파일 수정:
+/etc/apache2/sites-available 디렉토리의 해당 사이트 설정 파일(예: 000-default.conf)을 수정합니다.
+text
+sudo nano /etc/apache2/sites-available/000-default.conf
+
+프록시 설정 추가:
+VirtualHost 블록 내에 다음 설정을 추가합니다.
+text
+<VirtualHost *:80>
+    # 기존 설정들...
+
+    ProxyRequests Off
+    ProxyPreserveHost On
+    ProxyVia Full
+
+    <Proxy *>
+        Require all granted
+    </Proxy>
+
+    ProxyPass /api http://localhost:3000
+    ProxyPassReverse /api http://localhost:3000
+
+    # 기타 설정들...
+</VirtualHost>
+
+여기서 http://localhost:3000은 Node.js 애플리케이션이 실행되는 주소와 포트입니다.
+------------------------------------
+
+
+
+sudo su -- root 권한 변경
+---ftp 관련 ---
+sudo systemctl restart vsftpd  ftp 시작
+sudo adduser ftpuser
+sudo passwd ftpuser
+
+sudo nano /etc/vsftpd.conf
+pasv_address=43.201.220.132
+pasv_enable=YES
+pasv_min_port=1024
+pasv_max_port=1048
+---------------
+putty 연결법
+---------------
+호스트 이름 및 포트 입력:
+
+1.Host Name (or IP address): AWS 관리 콘솔에서 확인한 Ubuntu 인스턴스의 퍼블릭 DNS 또는 퍼블릭 IP 주소를 입력합니다.
+  예: ec2-203-0-113-25.compute-1.amazonaws.com 또는 203.0.113.25
+  Port: 기본 SSH 포트인 22를 사용합니다.
+  Connection type: SSH가 선택되어 있는지 확인합니다.
+
+2.3. SSH 인증 설정
+  SSH 키 지정:
+
+   왼쪽 카테고리에서 Connection > SSH > Auth를 클릭합니다.
+   Private key file for authentication 섹션에서 Browse 버튼을 클릭하여 생성된 .ppk 파일을 선택합니다.
+예: C:\path\to\your-key.ppk
+
+2.4. 세션 저장 (선택 사항)
+세션 저장:
+  설정을 매번 입력하지 않으려면, 왼쪽 상단의 Session을 클릭합니다.
+  Saved Sessions 필드에 세션 이름을 입력합니다. 예: MyAWSUbuntu
+  Save 버튼을 클릭하여 세션을 저장합니다.
+
+---------------
+파일질라 연결법
+----------------
+
+2. FileZilla에서 PPK 키 파일을 사용하도록 설정
+FileZilla는 SFTP 연결 시 SSH 키 인증을 지원합니다. 최신 버전의 FileZilla는 PuTTY의 .ppk 키 파일을 직접 지원합니다. 다음 단계를 따라 설정하세요.
+
+2.1. FileZilla 열기 및 사이트 관리자 열기
+FileZilla 실행:
+
+설치된 FileZilla를 실행합니다.
+사이트 관리자 열기:
+
+호스트(Host): AWS Ubuntu 인스턴스의 퍼블릭 DNS 또는 IP 주소 입력.
+  예: ec2-203-0-113-25.compute-1.amazonaws.com 또는 203.0.113.25
+  포트(Port): 22 (기본 SSH 포트)
+  프로토콜(Protocol): SFTP - SSH File Transfer Protocol 선택
+  로그온 유형(Logon Type): 키 파일(Key file) 선택
+ 사용자(User): ubuntu (Ubuntu 인스턴스의 기본 사용자 이름)
+ 키 파일(Key file): .ppk 파일의 경로를 지정합니다.
+ 예: C:\path\to\your-key.ppk
+
+2.4. 연결 저장 및 접속
+설정 저장:
+
+설정을 완료했으면 확인(OK) 버튼을 클릭하여 사이트를 저장합니다.
+사이트에 연결:
+
+사이트 관리자에서 방금 생성한 사이트를 선택하고 연결(Connect) 버튼을 클릭합니다.
+보안 경고 처리:
+
+처음 연결 시 서버 인증서 확인 창이 나타날 수 있습니다.
+서버가 신뢰할 수 있는 경우 예(Yes) 를 클릭하여 진행합니다.
+
+
+
+----------------------
+MongoDB 설치 
+-----------------------
+1.MongoDB 공개 GPG 키를 시스템에 추가합니다:
+  wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+
+2.MongoDB 리포지토리를 추가합니다:
+  echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+
+3.패키지 데이터베이스를 업데이트합니다:
+ sudo apt-get update
+
+4.MongoDB를 설치합니다:
+sudo apt-get install -y mongodb-org
+
+5.MongoDB 서비스를 시작합니다:
+ sudo service mongod start
+ sudo systemctl start mongod
+ sudo systemctl status mongod
+
+사용 중인 메모리: 약 120.8MB
+설정 파일 위치: /etc/mongod.conf
+
+계정 생성등...
+MongoDB에서 계정을 생성하는 기본적인 단계는 다음과 같습니다:
+MongoDB 서버에 접속합니다:
+
+1.mongosh
+
+2.admin 데이터베이스로 전환합니다:
+
+use admin
+
+3.관리자 계정을 생성합니다 (아직 없는 경우):
+javascript
+db.createUser(
+  {
+    user: "adminUser",
+    pwd: "adminPassword",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+
+일반 사용자 계정을 생성하려면 해당 데이터베이스로 전환합니다:
+text
+use yourDatabase
+
+사용자 계정을 생성합니다:
+javascript
+db.createUser(
+  {
+    user: "username",
+    pwd: "password",
+    roles: [ { role: "readWrite", db: "yourDatabase" } ]
+  }
+)
+
+계정 생성 확인:
+text
+show users
+
+
+----------------
+database 생성
+---------------
+local 데이터베이스는 MongoDB의 특수한 데이터베이스로, 일반적으로 사용자 계정을 생성하지 않습니다. local 데이터베이스는 주로 복제 관련 데이터를 저장하는 데 사용되며, 일반 사용자가 직접 접근할 필요가 없습니다.
+대신, 다음과 같이 진행하는 것이 좋습니다:
+
+
+새로운 데이터베이스 생성:
+애플리케이션을 위한 새 데이터베이스를 만듭니다. 예를 들어:
+
+use myapp
+
+이 명령어는 'myapp'이라는 새 데이터베이스를 생성하거나 선택합니다.
+데이터베이스에 데이터 추가:
+MongoDB는 실제로 데이터를 삽입할 때까지 데이터베이스를 생성하지 않습니다. 간단한 문서를 삽입해 보세요:
+javascript
+db.mycollection.insertOne({ "test": "data" })
+
+사용자 생성:
+이제 새 데이터베이스에 사용자를 생성할 수 있습니다:
+javascript
+db.createUser(
+  {
+    user: "midstar",
+    pwd: "dlalwjd5",
+    roles: [{ role: "readWrite", db: "myapp" }]
+  }
+)
+
+데이터베이스 목록 확인:
+
+show dbs
+
+이제 'myapp' 데이터베이스가 목록에 표시될 것입니다.
+
+
+mongosh
+
+-----------------
+nodejs/몽고  db 연동 
+------------
+1.driver 설치
+  npm install mongodb
+2.연결 샘플 nodejs 폴더 밑에 mongodb.js 
+
+3.Connection Pool 설정:
+MongoClient를 생성할 때 옵션으로 connection pool 크기를 지정할 수 있습니다.
+
+db.js
+const { MongoClient } = require('mongodb');
+const uri = "mongodb://localhost:27017";
+const dbName = "testdb";
+
+const client = new MongoClient(uri, {
+  maxPoolSize: 10,
+  minPoolSize: 5
+});
+
+async function connect() {
+  if (!client.isConnected()) {
+    await client.connect();
+  }
+  return client.db(dbName);
+}
+
+module.exports = { connect };
+
+
+4.윈도우에서 mongodb 연결하는 client 도구 사용 
+  - compass 설치후 연결함.
+  
+
+----
+jenkins 설정
+-----
+Jenkins 실행 및 브라우저에서 접근:
+설치가 완료되면, Jenkins는 자동으로 실행됩니다.
+
+기본적으로 Jenkins는 로컬에서 http://localhost:8080 주소로 접근할 수 있습니다. 이를 위해 웹 브라우저를 열고 위 주소로 접속하세요.
+
+초기 설정 페이지가 나타나면, Administrator password를 입력하라는 메시지가 나옵니다. 이 비밀번호는 Jenkins 설치 중 생성되며, 파일에서 찾을 수 있습니다.
+
+비밀번호 파일 위치:
+C:\Users\TOURSOFT\AppData\Local\Jenkins\.jenkins\secrets\initialAdminPassword
+
+시작.net start jenkins
+중지.net stop jenkins
+
+admin/!Dlal~~
+
+
+--- 로컬에서 공용 ip없는 상태에서 jenkins  활용법 ---
+https://ngrok.com/  구글 계정으로 연동함
+
+webhook사용해보자
+https://ngrok.com/
+복구 문구 gmail 에서 찾아볼것
+
+D:\ngrok>ngrok config add-authtoken 2moraT9n2a114QOYK7tHExe8bwX_4QC6pzUv785E2gLnqfCJS
+Authtoken saved to configuration file: C:\Users\TOURSOFT\AppData\Local/ngrok/ngrok.yml
+Forwarding  https://4e07-112-217-239-226.ngrok-free.app -> http://localhost:8080 
+
+jangminseok-window/nodeWeb --> setting --> webhook 설정해야함.
+
+
+jenkins openssh 서버에서 aws 접속하려면 
+ssh -i C:\Users\toursoft\.ssh\ubuntu-micro.pem ubuntu@ec2-3-39-228-155.ap-northeast-2.compute.amazonaws.com
+파일인데  ppk로 만들어진 privatekey를 puttyken를 이용해서 pem 형식의 publickey  변환해야함
+
+                                                                                                                                                                                                                                                              Help shape K8s Bindings https://ngrok.com/new-features-update?ref=k8s                                                                                                                                                                                                                                 Session Status                online                                                                                                               Account                       midstar.jang@gmail.com (Plan: Free)                                                                                  Version                       3.16.0                                                                                                               Region                        Japan (jp)                                                                                                           Latency                       41ms                                                                                                                 Web Interface                 http://127.0.0.1:4040                                                                                                Forwarding                    https://4e07-112-217-239-226.ngrok-free.app -> http://localhost:8080                                                                                                                                                                                                    Connections                   ttl     opn     rt1     rt5     p50     p90                                                                                                        0       0       0.00    0.00    0.00    0.00                                                                                                                                                                       
+
+-- 개발환경/운영환경 다른 변수 활용 --
+환경 변수를 사용하면, 동일한 코드를 유지하면서도 각기 다른 환경에서 설정값을 변경할 수 있습니다.
+
+1.1 .env 파일 설정
+dotenv 패키지를 사용하여 환경 변수를 설정할 수 있습니다.
+
+dotenv 패키지 설치: npm install dotenv
+
+개발환경에서 node -r dotenv/config webApp.js 실행
+운영환경에서 NODE_ENV=production node -r dotenv/config webApp.js 실행
+
+1.2 .config  설정
+npm install config
+
+윈두우 OS 
+set NODE_ENV=development && node webApp.js
+
+$env:NODE_ENV="development"; node webApp.js
+$env:NODE_ENV="production"; node webApp.js
+
+개발에서 실행
+NODE_ENV=development node webApp.js
+운영에서 실행 
+NODE_ENV=production node webApp.js
+
+ nohup env NODE_ENV=production /home/ubuntu/.nvm/versions/node/v22.9.0/bin/node webApp.js
+-- 로그 남기는 법 --
+
+1.로그 로테이션 스크립트 사용:
+날짜별로 로그 파일을 분리하려면 로그 로테이션(log rotation) 기능을 사용함
+
+log_rotation_script.sh 실행
+cron 등록
+0 0 * * * /home/ubuntu/nodeWeb/log_rotation_script.sh 
+
+2.winston 라이브러리 사용
+-- 로그 파일 남김
+
+--- API 프로젝트시 자동 문서화 기능 --  
+ Node.js 프로젝트에서 Swagger를 사용하여 API 문서를 자동으로 생성하고 관리
+
+
+
+-------------- redis 설치 ----------------
+sudo apt install redis-server
+Redis 서비스 시작:
+sudo systemctl start redis-server
+sudo systemctl restart redis-server
+
+redis 설치 확인:
+redis-cli ping --> PONG 
+설정 수정시
+sudo nano /etc/redis/redis.conf
+bind 0.0.0.0
+ 윈도우용 접속 tool
+https://redis.io/redis-enterprise/redis-insight/
+requirepass dlalwjd5
+
+
+------------  ELK 스택 --- 
+ELK 스택 (Elasticsearch, Logstash, Kibana):
+Elasticsearch: 로그 데이터 저장 및 검색
+Logstash: 로그 수집 및 처리
+Kibana: 데이터 시각화 및 대시보드 생성
+장점: 강력한 검색 기능, 실시간 모니터링, 커스터마이즈 가능한 대시보드
+
+-- 프로메테우스 솔루션 설치 --------
+jms  pc : 
+cd C:\Program Files\prometheus
+prometheus.exe --config.file=prometheus.yml
+
+net stop prometheus
+net start prometheus
+
+
+
+1.Node Exporter 다운로드 설치
+2.sudo useradd -rs /bin/false node_exporter 사용자 생성
+3.서비스 시작 및 재로드 
+  sudo systemctl daemon-reload
+  sudo systemctl start node_exporter
+  sudo systemctl enable node_exporter
+4. 서비스 확인 
+   sudo systemctl status node_exporter
+
+-- 아파치 Exporter  -- 
+1.sudo systemctl daemon-reload
+  sudo systemctl start apache_exporter
+  sudo systemctl enable apache_exporter   
+
+
+-- 그라파나 -- JMS PC
+cloud - midstarjang.grafana.net
+http://localhost:3000/?orgId=1 admin/!Dl~~
+ 시각화 하는것은 나중에 확인필요 
+
+--- nodejs EJS  엔진 사용 ---
+ 1.npm install ejs
+ 2.
+// 사용 시
+res.render('templates/view.ejs');
+res.render('templates2/view.ejs');
+
+
+---- API 서버  --- 
+/api --> 3000 port   --> 분리해서 개발 
+--> nodeApi
+
+/display --> 3001  port
+--> nodeWeb
