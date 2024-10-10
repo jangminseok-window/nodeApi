@@ -20,9 +20,12 @@ const {
 
 const { v4: uuidv4 } = require('uuid'); // UUID 생성을 위해 추가
 
-logger.info(`WebApp Start---->`);
+logger.info(`apiApp Start---->`);
 
 logger.info(`prometeus Start---->`);
+
+
+
 
 const promClient = require('prom-client');
 const collectDefaultMetrics = promClient.collectDefaultMetrics;
@@ -55,24 +58,39 @@ app.use(async (req, res, next) => {
   };
     
   
+  logger.info(`Request Body: ${JSON.stringify(req.body)}`);
 
-  if (sessionVal) { // session 값이 있다면 시간 갱신
-    
+  app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+      logger.error('Bad JSON', err);
+      return res.status(400).send({ status: 400, message: "Bad JSON" });
+    }
+    next();
+  });
+
+   if (sessionVal) { // session 값이 있다면 시간 갱신
+      logger.info(`sessionVal 1::` );
       const exists = await redis.exists(sessionVal);
+      logger.info(`sessionVal 2::` );
+      
       if (exists === 1) {
         const result = await redis.expire(sessionVal, serverConfig.sessionTimeout);
       } 
      
-    
-  }
+      logger.info(`sessionVal 3::` );
+      
+    }
   
   } catch (error) {
+    logger.info(`sessionVal 4::` );
     logger.error(`Error updating session TTL: ${error}`);
   }    
 
   next();
 });
 
+
+logger.info(`sessionVal 갱신이후 :` );
 
 
 

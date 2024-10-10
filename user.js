@@ -21,6 +21,10 @@ const router = require('express').Router();
 
 const redis = getRedisPool();
 
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 router.get('/view', async function(req, res) {
   try {
 
@@ -72,13 +76,7 @@ router.get('/view', async function(req, res) {
 
     logger.info('Query results:', rows);
 
-    /*res.render('userView', {
-      title: 'user View',
-      heading: 'Welcome to userView',
-      items: [rows[0].id, rows[0].name, rows[0].email]
-    });*/
-
-
+   
     res.json(rows[0]);
   } catch (error) {
     logger.error('Error executing query:', error);
