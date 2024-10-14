@@ -447,3 +447,21 @@ res.render('templates2/view.ejs');
 
 /display --> 3001  port
 --> nodeWeb
+
+--- TypeScript  -- 
+1.npm install -g typescript
+2.tsc --init //프로젝트 초기화
+3.tsc tsSample.ts // node js 변환
+4.node tsSample.js 
+
+-- TypeScript 직접실행 ---
+1.ts-node 설치:
+npm install -g ts-node
+
+2.TypeScript 파일 직접 실행:
+ts-node app.ts
+
+
+--- deno 실행 
+
+deno run --allow-net tsWebserverSam.ts
