@@ -29,12 +29,7 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
-<<<<<<< HEAD
     "@types/config": "^3.3.5",
     "@types/winston": "^2.4.4"
-=======
-    "@types/express": "^5.0.0",
-    "ts-node": "^10.9.2"
->>>>>>> 27d0e58b1023f9cb1fa7c3a652f0d53c611d1a5b
   }
 }
