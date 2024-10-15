@@ -99,6 +99,7 @@ logger.info(`sessionVal 갱신이후 :` );
 //const boardRoutes = require('./board');
 const authRoutes = require('./auth');
 const userRoutes = require('./user');
+const esbRoutes = require('./esbApi');
 //const voteRoutes = require('./vote');
 
 
@@ -112,6 +113,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //app.use('/board', boardRoutes);
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/esb', esbRoutes);
+
 //app.use('/vote', voteRoutes);
 
 

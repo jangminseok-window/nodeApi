@@ -16,6 +16,12 @@
       "user": "",
       "password": "dlalwjd5",
       "database" : ""
+    },
+
+    "meta": {
+      "url": "http://112.217.239.227/api/bfm/realTimeSearch.do",
+      "method": "get"
+     
     }
     
 
