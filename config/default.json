@@ -22,6 +22,13 @@
       "url": "http://112.217.239.227/api/bfm/realTimeSearch.do",
       "method": "get"
      
+    },
+    
+    
+    "estar": {
+      "url": "https://zeapiv5-test.eastarjet.com/ota",
+      "AgentName": "LOTTE_OTA",
+       "Password": "@eastar12"
     }
     
 

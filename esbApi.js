@@ -66,44 +66,24 @@ const {
        // logger.info(result.ErrorCode);  // "0"
         
         //const xmlString = result.result;
-       const xmlString = `{
-            "FareSearchRS": {
-                "ErrorCode": "0",
-                "ErrorDesc": "정상적인 데이터입니다.",
-                "BKP1": [
-                    {
-                        "SEQ": "A70",
-                        "value": "BKP1- a70",
-                        "BKP-IN": [
-                                            {
-                                                "SEQ": "A70",
-                                                "value": "BKPIN- a70"
-                                            },
-                                            {
-                                                "SEQ": "A70",
-                                                "value": "BKPIN- a710"
-                                            }
-                                        ]
-                    },
-                    {
-                        "SEQ": "A71",
-                        "value": "BKP1- a71",
-                        "BKP-IN": [
-                                            {
-                                                "SEQ": "A71",
-                                                "value": "BKPIN- a711"
-                                            },
-                                            {
-                                                "SEQ": "A72",
-                                                "value": "BKPIN- a710"
-                                            }
-                                        ]
-
-                    }
-                ]
-            }
-        }`;
-            
+       const xmlString = `<FareSearchRS><ErrorCode>0</ErrorCode><ErrorDesc>정상적인 데이터입니다.</ErrorDesc>
+              <BKP1 SEQ="A70">
+                BKP1- a70 
+                   <BKP2  num="A70-1">
+                     BKP2- a70-1 
+                   </BKP2>
+                   <BKP2  num="A70-2">
+                     BKP2- a70-2 
+                   </BKP2>
+              </BKP1>
+              <BKP1 SEQ="A71">
+                BKP1- a70 ,
+                <BKP2 num="A71-1">
+                     BKP2- a71-1 
+                 </BKP2>
+             </BKP1>
+        </FareSearchRS>`;
+       
        // DOMParser 인스턴스 생성
         const parser = new DOMParser();
 
@@ -131,24 +111,33 @@ const {
        
        
 
-        // BKP1 태그들을 모두 가져옵니다
+         // BKP1 태그들을 모두 가져옵니다
         const bkp1Elements = xmlDoc.getElementsByTagName('BKP1');
-        // 각 BKP1 태그의 값과 속성을 출력합니다
-        
-      
-        Array.from(bkp1Elements).forEach((bkp1, index) => {
+
+        Array.from(bkp1Elements).forEach((bkp1) => {
             const seq = bkp1.getAttribute('SEQ');
-            const value = bkp1.textContent.trim();
+            const value = bkp1.childNodes[0].nodeValue.trim();
             
-            outStr.FareSearchRS.BKP1.push({
+            const bkp1Item = {
                 SEQ: seq,
-                value: value
+                value: value,
+                BKP2: []
+            };
+
+            // BKP2 태그들을 가져옵니다
+            const bkp2Elements = bkp1.getElementsByTagName('BKP2');
+            Array.from(bkp2Elements).forEach((bkp2) => {
+                const bkp2Seq = bkp2.getAttribute('num');
+                const bkp2Value = bkp2.textContent.trim();
+                
+                bkp1Item.BKP2.push({
+                  num: bkp2Seq,
+                  value: bkp2Value
+                });
             });
-            /*console.log(`BKP1 #${index + 1}:`);
-            console.log(`  SEQ: ${seq}`);
-            console.log(`  Value: ${value}`);
-            console.log('---');*/
-        }); 
+
+            outStr.FareSearchRS.BKP1.push(bkp1Item);
+        });
         
 
         const jsonResult = JSON.stringify(outStr, null, 2);

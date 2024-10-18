@@ -3,6 +3,8 @@ const cors = require('cors');
 const config = require('config');
 const dbConfig = config.get('db');
 const metaConfig = config.get('meta');
+const estarConfig = config.get('estar');
+
 
 const redisConfig = config.get('redis');
 const serverConfig = config.get('server');
@@ -45,6 +47,7 @@ module.exports = {
   cors,
   getRedisPool,
   app,
-  axios
+  axios,
+  estarConfig
 
 };
