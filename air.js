@@ -1,5 +1,6 @@
 const utils = require('./common/utils');
 const estarUtil = require('./airline/estarUtil');
+const asianaUtil = require('./airline/asianaUtil');
 // router 는 제외하고 정의
 const {  
     config,
@@ -40,29 +41,32 @@ const {
     return tokenInfo;
   }
 
-  async function processSearch(searchObj) { 
+  async function processSearch(searchObj,carrier) { 
     
     let result = null;
 
-    for (const carrier of searchObj.carriers) {
-        if(utils.safeCompareStrings("ZE", carrier)) {
+   
+    if(utils.safeCompareStrings("ZE", carrier)) {
           result = await estarUtil.getEstarSearch(searchObj);
-        }
-    }
+     } else if(utils.safeCompareStrings("OZ", carrier)) {
+          result = await asianaUtil.getOZSearch(searchObj);
+     }
+   
     
     return result;
   }
   
   
-  function convertApiFareSkdFormat(response,searchObj) { 
+  async  function convertApiFareSkdFormat(response,searchObj,carrier) { 
     
     let result = null;
 
-    for (const carrier of searchObj.carriers) {
-        if(utils.safeCompareStrings("ZE", carrier)) {
-          result = estarUtil.convertEstarFareSkdInfo(response,searchObj);
-        }
-    }
+    
+     if(utils.safeCompareStrings("ZE", carrier)) {
+         result = estarUtil.convertEstarFareSkdInfo(response,searchObj);
+     } else if(utils.safeCompareStrings("OZ", carrier)) {
+         result = await asianaUtil.convertOZFareSkdInfo(response,searchObj);
+     }
     
     return result;
   }
@@ -98,12 +102,28 @@ const {
      
        
       searchObj.tokenInfo = tokenInfo;
-      const searchResult = await processSearch(searchObj);
       
-      const result = convertApiFareSkdFormat(searchResult,searchObj);
-
+      const finalResult = {
+        operatorCode: "200",
+        operatorMsg: "success",
+        lines: [] 
+      };
+      
+      const results = await Promise.all(searchObj.carriers.map(async (carrier) => {
+        const searchResult = await processSearch(searchObj,carrier);
+        const innerResult = await convertApiFareSkdFormat(searchResult, searchObj,carrier);
+        finalResult.lines.push(innerResult);
+        return   innerResult;
+      }));
+      
+      
+      results.flat()
+      
+     
+      
+     // logger.info("outout333-result:" ,result);
         
-       res.status(200).json(result);
+      res.status(200).json(finalResult);
 
         
       } catch (error) {

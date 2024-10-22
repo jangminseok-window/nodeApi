@@ -29,7 +29,13 @@
       "url": "https://zeapiv5-test.eastarjet.com/ota",
       "AgentName": "LOTTE_OTA",
        "Password": "@eastar12"
+    },
+
+    "asiana": {
+      "url": "https://awd.asianasabre.co.kr/",
+      "AgtID": "4673"
     }
+    
   }
   
   

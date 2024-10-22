@@ -4,6 +4,8 @@ const config = require('config');
 const dbConfig = config.get('db');
 const metaConfig = config.get('meta');
 const estarConfig = config.get('estar');
+const asianaConfig = config.get('asiana');
+
 
 
 const redisConfig = config.get('redis');
@@ -48,6 +50,7 @@ module.exports = {
   getRedisPool,
   app,
   axios,
-  estarConfig
+  estarConfig,
+  asianaConfig
 
 };
