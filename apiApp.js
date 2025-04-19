@@ -20,6 +20,8 @@ const {
 
 const { v4: uuidv4 } = require('uuid'); // UUID 생성을 위해 추가
 
+
+
 logger.info(`apiApp Start---->`);
 
 logger.info(`prometeus Start---->`);
@@ -49,12 +51,19 @@ app.use(async (req, res, next) => {
  //req에 공통으로 설정해야될 사항 설정
  try { 
   logger.info(`app user`);
+  const estarAuth = req?.headers?.['Authorization'] || null;
+  logger.info(`estarAuth::` + estarAuth);
+  
   const sessionVal = req?.headers?.['x-session-id'] || null;
 
+  
   logger.info(`sessionVal::` + sessionVal);
+  
+  
 
   req.common = {
-      sessionVal: sessionVal
+      sessionVal: sessionVal,
+      estarAuth : estarAuth
   };
     
   
@@ -97,6 +106,8 @@ logger.info(`sessionVal 갱신이후 :` );
 //const boardRoutes = require('./board');
 const authRoutes = require('./auth');
 const userRoutes = require('./user');
+const esbRoutes = require('./esbApi');
+const airRoutes = require('./air');
 //const voteRoutes = require('./vote');
 
 
@@ -110,6 +121,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //app.use('/board', boardRoutes);
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/esb', esbRoutes);
+app.use('/air', airRoutes);
 //app.use('/vote', voteRoutes);
 
 
